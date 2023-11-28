@@ -21,3 +21,12 @@ a 2 sec delay:
 ```shell
 TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock" ./mvnw clean package -Dwait-a-bit
 ```
+
+Here is the [issue](https://github.com/testcontainers/testcontainers-java/issues/7875) and the solution is:
+
+```shell
+colima start --network-address
+export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
+export TESTCONTAINERS_HOST_OVERRIDE=$(colima ls -j | jq -r '.address')
+export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
+```
